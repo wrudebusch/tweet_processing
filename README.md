@@ -17,22 +17,24 @@ If run by itself
 ```shell
 $ python3 process_tweets.py
 ```
-This will generate a folder named `tweets_YYYYMMDD` where `YYYYMMDD` is today's date.
+This will generate a subfolder named `tweets_YYYYMMDD` where `YYYYMMDD` is today's date.
 
 Inside the folder will be timestamped `.csv` versions of the nodes, terms, and raw Tweet data. This is done for historical purposes.
 
-The answers will be saved as `matches1_YYYYMMDD.txt` for `terms1.txt` and `nodes1.txt` applied to `tweets.jsonl.gz`. Similarly, `matches2_YYYYMMDD.txt` is for `terms2.txt` and `nodes2.txt` applied to `tweets.jsonl.gz`.
+The answers will be saved as `matches1_YYYYMMDD.txt` for `terms1.txt` and `nodes1.txt` applied to `tweets.jsonl.gz`. 
+
+Similarly, `matches2_YYYYMMDD.txt` is for `terms2.txt` and `nodes2.txt` applied to `tweets.jsonl.gz`.
 
 ## Nightly Job
 The default for the nightly job is 11:00 PM local time.
+
+If you want to test this I would set it for a 1 min future of your current time. for example, if current time is 3:12 PM change to this:  ```sched.add_job(job_function, 'cron', hour='15', minute="13")```. Save and run:
 
 ```shell
 $ python3 nightly_job.py
 ```
 
-If you want to test to see if this works I would set it for a 1 min future of your current time.
-
-Note: in production this job should be stored in a server. Lacking this, we are trusting that the Python script is allowed to run 24/7, waiting to execute at 11pm. The nodes, terms and tweet data can be refreshed in the meantime w/o loss of replayability.
+Note: for proper recovery and logging this job should be stored in a server (as suggested in the documentation: ). Lacking this, we are trusting that the Python script is allowed to run 24/7, waiting to execute at 11pm. The nodes, terms, and tweet data can be refreshed in the meantime w/o loss of replayability.
 
 ## Expanding
 If a new terms and nodes list were to be added all that needs to be done is an additional line to the `main()` part of `process_tweets.py`. Specifically, if `nodes3.txt` and `terms3.txt` were added then all one would need to do is add the following line:
